@@ -1,0 +1,191 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Jira Issue Ticket",
+  "description": "Schema for Jira ticket JSON input (based on Jira REST API v3 format)",
+  "type": "object",
+  "required": ["id", "key", "fields"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique ticket identifier",
+      "examples": ["12345"]
+    },
+    "key": {
+      "type": "string",
+      "description": "Human-readable ticket key",
+      "pattern": "^[A-Z]+-[0-9]+$",
+      "examples": ["PROJ-123", "DEMO-456"]
+    },
+    "fields": {
+      "type": "object",
+      "description": "Ticket fields from Jira",
+      "required": ["issuetype", "status", "summary"],
+      "properties": {
+        "issuetype": {
+          "type": "object",
+          "required": ["name"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": ["Story", "Bug", "Epic", "Task", "Sub-task", "Improvement"],
+              "description": "Type of Jira issue"
+            }
+          }
+        },
+        "status": {
+          "type": "object",
+          "required": ["name"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Current workflow status",
+              "examples": ["To Do", "In Progress", "Done", "Blocked"]
+            }
+          }
+        },
+        "summary": {
+          "type": "string",
+          "description": "Short ticket title",
+          "minLength": 10,
+          "maxLength": 255,
+          "examples": ["Add user authentication feature"]
+        },
+        "description": {
+          "type": ["string", "object", "null"],
+          "description": "Detailed ticket description (can be plain text, markdown, or ADF)"
+        },
+        "priority": {
+          "type": ["object", "null"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "examples": ["Highest", "High", "Medium", "Low", "Lowest"]
+            }
+          }
+        },
+        "labels": {
+          "type": "array",
+          "description": "Ticket labels/tags",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "components": {
+          "type": "array",
+          "description": "Project components",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"}
+            }
+          },
+          "default": []
+        },
+        "assignee": {
+          "type": ["object", "null"],
+          "description": "Assigned user",
+          "properties": {
+            "accountId": {"type": "string"},
+            "displayName": {"type": "string"},
+            "emailAddress": {"type": ["string", "null"]},
+            "active": {"type": "boolean", "default": true}
+          }
+        },
+        "reporter": {
+          "type": "object",
+          "description": "User who created the ticket",
+          "required": ["displayName"],
+          "properties": {
+            "accountId": {"type": "string"},
+            "displayName": {"type": "string"},
+            "emailAddress": {"type": ["string", "null"]},
+            "active": {"type": "boolean", "default": true}
+          }
+        },
+        "created": {
+          "type": "string",
+          "description": "Creation timestamp (ISO 8601)",
+          "format": "date-time",
+          "examples": ["2025-11-20T10:00:00Z"]
+        },
+        "updated": {
+          "type": "string",
+          "description": "Last update timestamp (ISO 8601)",
+          "format": "date-time",
+          "examples": ["2025-11-26T09:30:00Z"]
+        },
+        "comment": {
+          "type": "object",
+          "description": "Comments on the ticket",
+          "properties": {
+            "comments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {"type": "string"},
+                  "author": {
+                    "type": "object",
+                    "properties": {
+                      "displayName": {"type": "string"}
+                    }
+                  },
+                  "body": {"type": ["string", "object"]},
+                  "created": {"type": "string", "format": "date-time"},
+                  "updated": {"type": "string", "format": "date-time"}
+                }
+              }
+            }
+          }
+        },
+        "attachment": {
+          "type": "array",
+          "description": "File attachments",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string"},
+              "filename": {"type": "string"},
+              "mimeType": {"type": "string"},
+              "size": {"type": "integer", "minimum": 0},
+              "created": {"type": "string", "format": "date-time"}
+            }
+          },
+          "default": []
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "id": "12345",
+      "key": "PROJ-123",
+      "fields": {
+        "issuetype": {"name": "Story"},
+        "status": {"name": "In Progress"},
+        "summary": "Add user authentication feature",
+        "description": "As a user, I want to log in securely so that my data is protected...",
+        "priority": {"name": "High"},
+        "labels": ["security", "authentication"],
+        "components": [{"name": "Backend"}],
+        "assignee": {
+          "accountId": "5b10ac8d82e05b22cc7d4ef5",
+          "displayName": "John Doe",
+          "emailAddress": "john@example.com",
+          "active": true
+        },
+        "reporter": {
+          "accountId": "5b10ac8d82e05b22cc7d4ef6",
+          "displayName": "Jane Smith",
+          "emailAddress": "jane@example.com",
+          "active": true
+        },
+        "created": "2025-11-20T10:00:00Z",
+        "updated": "2025-11-26T09:30:00Z"
+      }
+    }
+  ]
+}
