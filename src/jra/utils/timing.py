@@ -58,13 +58,13 @@ class Timer:
 @contextmanager
 def timed_operation(operation_name: str = "operation") -> Generator[Timer, None, None]:
     """Context manager for timing operations.
-    
+
     Args:
         operation_name: Name of the operation being timed
-        
+
     Yields:
         Timer instance
-        
+
     Example:
         >>> with timed_operation("evaluation") as timer:
         ...     # do work
@@ -77,3 +77,24 @@ def timed_operation(operation_name: str = "operation") -> Generator[Timer, None,
         yield timer
     finally:
         timer.stop()
+
+
+def format_duration(seconds: float) -> str:
+    """Format duration in human-readable form.
+
+    Args:
+        seconds: Duration in seconds
+
+    Returns:
+        Formatted duration string
+    """
+    if seconds < 0.001:
+        return f"{seconds * 1000000:.2f}µs"
+    elif seconds < 1.0:
+        return f"{seconds * 1000:.2f}ms"
+    elif seconds < 60:
+        return f"{seconds:.2f}s"
+    else:
+        minutes = int(seconds // 60)
+        remaining_seconds = seconds % 60
+        return f"{minutes}m {remaining_seconds:.2f}s"

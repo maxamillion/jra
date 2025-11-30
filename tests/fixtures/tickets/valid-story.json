@@ -2,6 +2,10 @@
   "id": "12345",
   "key": "PROJ-123",
   "fields": {
+    "project": {
+      "key": "PROJ",
+      "name": "Example Project"
+    },
     "issuetype": {
       "name": "Story"
     },

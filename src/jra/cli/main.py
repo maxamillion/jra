@@ -3,6 +3,7 @@
 import click
 
 from jra import __version__
+from jra.cli.evaluate import evaluate
 from jra.utils.logging import setup_logging
 
 
@@ -17,17 +18,17 @@ from jra.utils.logging import setup_logging
 @click.pass_context
 def cli(ctx: click.Context, debug: bool) -> None:
     """Jira Review Agent - Evaluate Jira tickets against process guidelines.
-    
+
     jra is a CLI tool that evaluates Jira issue tickets against your team's
     process guidelines, identifying violations and providing quality assessments.
     """
     # Ensure context object exists
     ctx.ensure_object(dict)
-    
+
     # Setup logging
     log_level = "DEBUG" if debug else "INFO"
     setup_logging(level=log_level)
-    
+
     # Store debug flag in context
     ctx.obj["debug"] = debug
 
@@ -36,6 +37,10 @@ def cli(ctx: click.Context, debug: bool) -> None:
 def version() -> None:
     """Show version information."""
     click.echo(f"jra version {__version__}")
+
+
+# Register evaluate command
+cli.add_command(evaluate)
 
 
 if __name__ == "__main__":

@@ -1,13 +1,22 @@
 """Configuration management for JRA."""
 
 import os
+import sys
 from pathlib import Path
 from typing import Any, Dict
 
-import tomli if hasattr(__builtins__, 'tomli') else tomllib
+# Python 3.11+ has tomllib built-in, earlier versions need tomli
+if sys.version_info >= (3, 11):
+    import tomllib
+else:
+    try:
+        import tomli as tomllib
+    except ImportError:
+        tomllib = None
+
 from dotenv import load_dotenv
 
-from jra.utils.exceptions import ConfigValidationError
+from jra.utils.exceptions import ConfigurationError
 
 
 class Config:
@@ -73,19 +82,25 @@ class Config:
 
     def _load_file(self, path: Path) -> None:
         """Load configuration from TOML file."""
+        if not path.exists():
+            raise ConfigurationError(
+                f"Configuration file not found: {path}",
+                context={"path": str(path)}
+            )
+
         try:
             with open(path, "rb") as f:
-                # Python 3.11+ has tomllib in stdlib
-                try:
-                    import tomllib
-                    file_config = tomllib.load(f)
-                except ImportError:
-                    import tomli
-                    file_config = tomli.load(f)
-                
+                if tomllib is None:
+                    raise ConfigurationError(
+                        "TOML support not available. Install tomli for Python < 3.11"
+                    )
+                file_config = tomllib.load(f)
+
                 self._merge_config(file_config)
+        except ConfigurationError:
+            raise
         except Exception as e:
-            raise ConfigValidationError(
+            raise ConfigurationError(
                 f"Failed to load config from {path}",
                 context={"path": str(path), "error": str(e)}
             )
