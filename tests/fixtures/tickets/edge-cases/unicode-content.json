@@ -1,0 +1,29 @@
+{
+  "id": "10005",
+  "key": "PROJ-105",
+  "fields": {
+    "summary": "Support international characters: 你好世界 مرحبا العالم Здравствуй мир",
+    "description": "## Unicode Test Cases\n\n### Chinese Characters\n你好世界 - Hello World\n\n### Arabic Text\nمرحبا بك في عالم البرمجة - Welcome to the programming world\n\n### Russian Cyrillic\nПривет мир программирования - Hello programming world\n\n### Emoji Support\n✅ Checkmark\n🚀 Rocket\n💡 Light bulb\n🔧 Wrench\n\n### Special Characters\n- Math: ∑ ∏ ∫ √ ∞\n- Currency: € ¥ £ ₹\n- Symbols: © ® ™ ° § ¶\n\n### Mixed Content\nUser story: 作为一个用户 (As a user), I want to see proper Unicode support 🌍",
+    "issuetype": {
+      "name": "Story",
+      "subtask": false
+    },
+    "priority": {
+      "name": "Major"
+    },
+    "status": {
+      "name": "To Do"
+    },
+    "reporter": {
+      "displayName": "国际化测试员",
+      "emailAddress": "i18n@example.com"
+    },
+    "created": "2025-11-26T10:00:00.000+0000",
+    "updated": "2025-11-26T10:00:00.000+0000",
+    "labels": ["i18n", "unicode", "globalization"],
+    "project": {
+      "key": "PROJ",
+      "name": "Example Project"
+    }
+  }
+}

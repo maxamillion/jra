@@ -22,16 +22,16 @@
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create Python project structure with src/jra/ layout per plan.md
-- [ ] T002 [P] Initialize pyproject.toml with project metadata, dependencies (Click, Pydantic, python-markdown, PyYAML)
-- [ ] T003 [P] Configure development tools in pyproject.toml (Black, Flake8, mypy, isort, pytest, pytest-cov)
-- [ ] T004 [P] Create README.md with installation instructions and quick start
-- [ ] T005 [P] Create LICENSE file (choose appropriate license)
-- [ ] T006 [P] Setup .gitignore for Python projects (venv, __pycache__, .pytest_cache, .coverage, dist, build)
-- [ ] T007 [P] Create GitHub Actions CI workflow (.github/workflows/ci.yml) for build, lint, type-check, test, coverage
-- [ ] T008 [P] Create pytest configuration in pyproject.toml with coverage thresholds (80% unit, 70% integration)
-- [ ] T009 [P] Create tests/conftest.py with pytest configuration and shared fixtures
-- [ ] T010 [P] Create test fixtures directory structure (tests/fixtures/guidelines/, tests/fixtures/tickets/, tests/fixtures/reports/)
+- [X] T001 Create Python project structure with src/jra/ layout per plan.md
+- [X] T002 [P] Initialize pyproject.toml with project metadata, dependencies (Click, Pydantic, python-markdown, PyYAML)
+- [X] T003 [P] Configure development tools in pyproject.toml (Black, Flake8, mypy, isort, pytest, pytest-cov)
+- [X] T004 [P] Create README.md with installation instructions and quick start
+- [X] T005 [P] Create LICENSE file (choose appropriate license)
+- [X] T006 [P] Setup .gitignore for Python projects (venv, __pycache__, .pytest_cache, .coverage, dist, build)
+- [X] T007 [P] Create GitHub Actions CI workflow (.github/workflows/ci.yml) for build, lint, type-check, test, coverage
+- [X] T008 [P] Create pytest configuration in pyproject.toml with coverage thresholds (80% unit, 70% integration)
+- [X] T009 [P] Create tests/conftest.py with pytest configuration and shared fixtures
+- [X] T010 [P] Create test fixtures directory structure (tests/fixtures/guidelines/, tests/fixtures/tickets/, tests/fixtures/reports/)
 
 ---
 
@@ -41,18 +41,18 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T011 [P] Create src/jra/__init__.py with package version export
-- [ ] T012 [P] Create src/jra/__main__.py entry point for `python -m jra`
-- [ ] T013 [P] Create src/jra/utils/__init__.py
-- [ ] T014 [P] Implement configuration management in src/jra/utils/config.py with TOML parsing and hierarchy
-- [ ] T015 [P] Implement logging setup in src/jra/utils/logging.py with level control and formatting
-- [ ] T016 [P] Implement timing utilities in src/jra/utils/timing.py for performance metrics
-- [ ] T017 [P] Create custom exception hierarchy in src/jra/utils/exceptions.py (JRAException, ParseError, ValidationError, EvaluationError, OutputError)
-- [ ] T018 [P] Write unit tests for utils in tests/unit/test_utils.py (config, logging, timing, exceptions)
-- [ ] T019 Create sample test fixtures in tests/fixtures/guidelines/basic-guidelines.md
-- [ ] T020 [P] Create sample test fixtures in tests/fixtures/tickets/valid-story.json
-- [ ] T021 [P] Create CLI base structure src/jra/cli/__init__.py
-- [ ] T022 Implement Click application root in src/jra/cli/main.py with version and help
+- [X] T011 [P] Create src/jra/__init__.py with package version export
+- [X] T012 [P] Create src/jra/__main__.py entry point for `python -m jra`
+- [X] T013 [P] Create src/jra/utils/__init__.py
+- [X] T014 [P] Implement configuration management in src/jra/utils/config.py with TOML parsing and hierarchy
+- [X] T015 [P] Implement logging setup in src/jra/utils/logging.py with level control and formatting
+- [X] T016 [P] Implement timing utilities in src/jra/utils/timing.py for performance metrics
+- [X] T017 [P] Create custom exception hierarchy in src/jra/utils/exceptions.py (JRAException, ParseError, ValidationError, EvaluationError, OutputError)
+- [X] T018 [P] Write unit tests for utils in tests/unit/test_utils.py (config, logging, timing, exceptions)
+- [X] T019 Create sample test fixtures in tests/fixtures/guidelines/comprehensive-guidelines.md
+- [X] T020 [P] Create sample test fixtures in tests/fixtures/tickets/ (valid-story.json, invalid-bug.json, edge-cases/)
+- [X] T021 [P] Create CLI base structure src/jra/cli/__init__.py
+- [X] T022 Implement Click application root in src/jra/cli/main.py with version and help
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 

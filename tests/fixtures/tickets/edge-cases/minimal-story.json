@@ -1,0 +1,28 @@
+{
+  "id": "10003",
+  "key": "PROJ-103",
+  "fields": {
+    "summary": "Minimal story with only required fields",
+    "description": "This story has the bare minimum required fields populated.",
+    "issuetype": {
+      "name": "Story",
+      "subtask": false
+    },
+    "priority": {
+      "name": "Minor"
+    },
+    "status": {
+      "name": "To Do"
+    },
+    "reporter": {
+      "displayName": "Test User",
+      "emailAddress": "test@example.com"
+    },
+    "created": "2025-11-26T10:00:00.000+0000",
+    "updated": "2025-11-26T10:00:00.000+0000",
+    "project": {
+      "key": "PROJ",
+      "name": "Example Project"
+    }
+  }
+}
