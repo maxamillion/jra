@@ -186,9 +186,7 @@ class ComplianceEvaluator(BaseEvaluator):
         priority_validation = guidelines.get_validation_for_field("priority")
         priority_name = issue.get_priority_name()
         if priority_validation and priority_name:
-            violations.extend(
-                self._validate_field("priority", priority_name, priority_validation)
-            )
+            violations.extend(self._validate_field("priority", priority_name, priority_validation))
 
         return violations
 

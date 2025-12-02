@@ -149,9 +149,7 @@ class MarkdownParser:
             fields = self._extract_field_list(field_text)
             for field in fields:
                 required_fields.append(
-                    RequiredField(
-                        field_name=field, issue_type=None, description=None
-                    )
+                    RequiredField(field_name=field, issue_type=None, description=None)
                 )
 
         # Parse story-specific required fields
@@ -165,9 +163,7 @@ class MarkdownParser:
             fields = self._extract_field_list(field_text)
             for field in fields:
                 required_fields.append(
-                    RequiredField(
-                        field_name=field, issue_type="Story", description=None
-                    )
+                    RequiredField(field_name=field, issue_type="Story", description=None)
                 )
 
         # Parse bug-specific required fields
@@ -181,9 +177,7 @@ class MarkdownParser:
             fields = self._extract_field_list(field_text)
             for field in fields:
                 required_fields.append(
-                    RequiredField(
-                        field_name=field, issue_type="Bug", description=None
-                    )
+                    RequiredField(field_name=field, issue_type="Bug", description=None)
                 )
 
         # Parse epic-specific required fields
@@ -197,9 +191,7 @@ class MarkdownParser:
             fields = self._extract_field_list(field_text)
             for field in fields:
                 required_fields.append(
-                    RequiredField(
-                        field_name=field, issue_type="Epic", description=None
-                    )
+                    RequiredField(field_name=field, issue_type="Epic", description=None)
                 )
 
         return required_fields
