@@ -4,7 +4,7 @@ Parses markdown documents containing team process guidelines into structured mod
 """
 
 import re
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional
 
 from jra.models.guidelines import (
     FieldValidation,
@@ -124,9 +124,7 @@ class MarkdownParser:
 
         return sections
 
-    def _parse_required_fields(
-        self, sections: Dict[str, str], content: str
-    ) -> List[RequiredField]:
+    def _parse_required_fields(self, sections: Dict[str, str], content: str) -> List[RequiredField]:
         """Parse required fields from markdown."""
         required_fields = []
 
@@ -142,7 +140,9 @@ class MarkdownParser:
 
         # Parse universal required fields
         universal_match = re.search(
-            r"Universal Required Fields.*?:(.*?)(?=###|##|$)", required_section, re.DOTALL | re.IGNORECASE
+            r"Universal Required Fields.*?:(.*?)(?=###|##|$)",
+            required_section,
+            re.DOTALL | re.IGNORECASE,
         )
         if universal_match:
             field_text = universal_match.group(1)
@@ -216,7 +216,9 @@ class MarkdownParser:
 
         # Parse description validation
         desc_match = re.search(
-            r"Description Validation(.*?)(?=###|##|$)", validation_section, re.DOTALL | re.IGNORECASE
+            r"Description Validation(.*?)(?=###|##|$)",
+            validation_section,
+            re.DOTALL | re.IGNORECASE,
         )
         if desc_match:
             validation_text = desc_match.group(1)
@@ -272,7 +274,9 @@ class MarkdownParser:
                         required_sections.append(section)
 
         # Extract general rules from "Requirements:" section
-        req_match = re.search(r"\*\*Requirements\*\*:(.*?)(?=\*\*|##|$)", validation_text, re.DOTALL)
+        req_match = re.search(
+            r"\*\*Requirements\*\*:(.*?)(?=\*\*|##|$)", validation_text, re.DOTALL
+        )
         if req_match:
             req_text = req_match.group(1)
             for line in req_text.split("\n"):
@@ -364,7 +368,9 @@ class MarkdownParser:
             if criteria:
                 standards.append(
                     QualityStandard(
-                        name="Definition of Ready", criteria=criteria, description="Sprint planning readiness"
+                        name="Definition of Ready",
+                        criteria=criteria,
+                        description="Sprint planning readiness",
                     )
                 )
 
@@ -380,7 +386,9 @@ class MarkdownParser:
             if criteria:
                 standards.append(
                     QualityStandard(
-                        name="Definition of Done", criteria=criteria, description="Completion criteria"
+                        name="Definition of Done",
+                        criteria=criteria,
+                        description="Completion criteria",
                     )
                 )
 

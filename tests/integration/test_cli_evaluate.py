@@ -6,7 +6,6 @@ Per constitution: TDD is NON-NEGOTIABLE - these tests written BEFORE implementat
 
 import json
 from pathlib import Path
-from typing import Any
 
 import pytest
 from click.testing import CliRunner
@@ -147,8 +146,7 @@ class TestEvaluateCommandIntegration:
         # Contract: Should include timing information in output
         output_lower = result.output.lower()
         assert any(
-            word in output_lower
-            for word in ["time", "duration", "elapsed", "ms", "seconds"]
+            word in output_lower for word in ["time", "duration", "elapsed", "ms", "seconds"]
         )
 
     def test_evaluate_missing_ticket_file(

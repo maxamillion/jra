@@ -21,13 +21,13 @@ class Timer:
 
     def stop(self) -> float:
         """Stop the timer and return elapsed time.
-        
+
         Returns:
             Elapsed time in seconds
         """
         if self._start_time is None:
             raise RuntimeError("Timer not started")
-        
+
         self._end_time = time.perf_counter()
         self._elapsed = self._end_time - self._start_time
         return self._elapsed
@@ -35,17 +35,17 @@ class Timer:
     @property
     def elapsed(self) -> float:
         """Get elapsed time.
-        
+
         Returns:
             Elapsed time in seconds
         """
         if self._start_time is None:
             return 0.0
-        
+
         if self._end_time is None:
             # Timer still running
             return time.perf_counter() - self._start_time
-        
+
         return self._elapsed
 
     def reset(self) -> None:

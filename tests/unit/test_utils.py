@@ -8,11 +8,9 @@ import logging
 import os
 import time
 from pathlib import Path
-from typing import Any, Dict
 from unittest.mock import MagicMock, mock_open, patch
 
 import pytest
-import yaml
 
 from jra.utils.config import Config
 from jra.utils.exceptions import (

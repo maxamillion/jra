@@ -6,7 +6,7 @@ class JRAException(Exception):
 
     def __init__(self, message: str, context: dict | None = None) -> None:
         """Initialize JRA exception.
-        
+
         Args:
             message: Error message
             context: Additional context information

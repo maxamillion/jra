@@ -3,7 +3,7 @@
 Models for parsing and validating process guidelines from markdown.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -83,9 +83,7 @@ class CustomRule(BaseModel):
         default_factory=list, description="Issue types this rule applies to"
     )
     conditions: List[str] = Field(default_factory=list, description="Rule conditions")
-    severity: str = Field(
-        default="MEDIUM", description="Violation severity if rule is broken"
-    )
+    severity: str = Field(default="MEDIUM", description="Violation severity if rule is broken")
 
     class Config:
         """Pydantic configuration."""

@@ -7,8 +7,6 @@ Per constitution: TDD is NON-NEGOTIABLE - these tests written BEFORE implementat
 import json
 from pathlib import Path
 
-import pytest
-
 
 class TestViolationDetectionFlow:
     """Integration tests for violation detection workflow.
@@ -220,9 +218,7 @@ class TestViolationDetectionFlow:
         assert report is not None
         assert report.ticket_key == "PROJ-107"
 
-    def test_violation_references_include_guideline_sections(
-        self, fixtures_dir: Path
-    ) -> None:
+    def test_violation_references_include_guideline_sections(self, fixtures_dir: Path) -> None:
         """Test violations include references to guideline sections."""
         from jra.evaluators.compliance import ComplianceEvaluator
         from jra.parsers.jira_parser import JiraParser

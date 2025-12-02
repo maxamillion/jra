@@ -24,7 +24,9 @@ class SchemaValidator:
         """
         if schema_dir is None:
             # Default to contracts directory in specs
-            self.schema_dir = Path(__file__).parents[3] / "specs" / "001-jira-evaluation" / "contracts"
+            self.schema_dir = (
+                Path(__file__).parents[3] / "specs" / "001-jira-evaluation" / "contracts"
+            )
         else:
             self.schema_dir = schema_dir
 
@@ -90,9 +92,7 @@ class SchemaValidator:
         except Exception as e:
             if isinstance(e, ValidationError):
                 raise
-            raise ValidationError(
-                "Jira input validation failed", context={"error": str(e)}
-            ) from e
+            raise ValidationError("Jira input validation failed", context={"error": str(e)}) from e
 
     def validate_evaluation_output(self, data: Dict[str, Any]) -> bool:
         """Validate evaluation report output against schema.

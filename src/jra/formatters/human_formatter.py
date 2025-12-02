@@ -3,8 +3,6 @@
 Formats evaluation reports for terminal display with optional colors.
 """
 
-from typing import Optional
-
 from jra.models.report import EvaluationReport
 from jra.models.violation import ViolationSeverity
 
@@ -119,9 +117,7 @@ class HumanFormatter:
             )
 
         if compliance.high_violations > 0:
-            lines.append(
-                f"  {self._colorize('HIGH:', self.RED)} {compliance.high_violations}"
-            )
+            lines.append(f"  {self._colorize('HIGH:', self.RED)} {compliance.high_violations}")
 
         if compliance.medium_violations > 0:
             lines.append(
@@ -129,9 +125,7 @@ class HumanFormatter:
             )
 
         if compliance.low_violations > 0:
-            lines.append(
-                f"  {self._colorize('LOW:', self.BLUE)} {compliance.low_violations}"
-            )
+            lines.append(f"  {self._colorize('LOW:', self.BLUE)} {compliance.low_violations}")
 
         lines.append(f"  {self._colorize('TOTAL:', self.BOLD)} {compliance.total_violations}")
 

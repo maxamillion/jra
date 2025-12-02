@@ -43,6 +43,7 @@ class TestJiraParserContract:
 
         # Contract: Must return a JiraIssue instance
         from jra.models.jira import JiraIssue
+
         assert isinstance(issue, JiraIssue)
 
         # Contract: Must extract required fields
@@ -151,6 +152,7 @@ class TestMarkdownParserContract:
 
         # Contract: Must return ProcessGuidelines instance
         from jra.models.guidelines import ProcessGuidelines
+
         assert isinstance(guidelines, ProcessGuidelines)
 
     def test_extract_required_fields_section(self, comprehensive_guidelines: str) -> None:

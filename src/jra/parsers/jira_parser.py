@@ -70,8 +70,14 @@ class JiraParser:
 
             # Parse optional fields
             description = fields.get("description")
-            assignee = self._parse_user(fields.get("assignee"), "assignee") if fields.get("assignee") else None
-            priority = self._parse_priority(fields.get("priority")) if fields.get("priority") else None
+            assignee = (
+                self._parse_user(fields.get("assignee"), "assignee")
+                if fields.get("assignee")
+                else None
+            )
+            priority = (
+                self._parse_priority(fields.get("priority")) if fields.get("priority") else None
+            )
 
             # Parse timestamps
             created = self._parse_datetime(fields.get("created"))
@@ -185,12 +191,7 @@ class JiraParser:
         try:
             # Jira uses ISO 8601 format: 2025-11-26T10:00:00.000+0000
             # Handle both with and without microseconds
-            if "." in value:
-                # With microseconds
-                dt_str = value.split("+")[0].split("-", 3)[-1] if "+" in value else value.split("Z")[0]
-                return datetime.fromisoformat(value.replace("+0000", "+00:00").replace("Z", "+00:00"))
-            else:
-                return datetime.fromisoformat(value.replace("+0000", "+00:00").replace("Z", "+00:00"))
+            return datetime.fromisoformat(value.replace("+0000", "+00:00").replace("Z", "+00:00"))
         except (ValueError, AttributeError):
             # If parsing fails, return None rather than raising error
             return None

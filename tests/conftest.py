@@ -1,4 +1,5 @@
 """Pytest configuration and shared fixtures."""
+
 import json
 from pathlib import Path
 from typing import Any, Dict
@@ -30,8 +31,8 @@ def sample_jira_ticket(fixtures_dir: Path) -> Dict[str, Any]:
             "description": "As a user, I want to test the system",
             "reporter": {"displayName": "Test User"},
             "created": "2025-01-01T00:00:00Z",
-            "updated": "2025-01-01T00:00:00Z"
-        }
+            "updated": "2025-01-01T00:00:00Z",
+        },
     }
 
 

@@ -4,7 +4,6 @@ Abstract base class for all evaluators.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any
 
 from jra.models.guidelines import ProcessGuidelines
 from jra.models.jira import JiraIssue

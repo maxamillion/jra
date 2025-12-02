@@ -55,15 +55,15 @@ class Config:
 
     def __init__(self, config_path: Path | None = None) -> None:
         """Initialize configuration.
-        
+
         Args:
             config_path: Optional path to config file
         """
         self._config: Dict[str, Any] = self.DEFAULT_CONFIG.copy()
-        
+
         # Load .env file if present
         load_dotenv()
-        
+
         # Load config file if provided or found
         if config_path:
             self._load_file(config_path)
@@ -76,7 +76,7 @@ class Config:
                 if path.exists():
                     self._load_file(path)
                     break
-        
+
         # Override with environment variables
         self._load_env()
 
@@ -84,8 +84,7 @@ class Config:
         """Load configuration from TOML file."""
         if not path.exists():
             raise ConfigurationError(
-                f"Configuration file not found: {path}",
-                context={"path": str(path)}
+                f"Configuration file not found: {path}", context={"path": str(path)}
             )
 
         try:
@@ -101,18 +100,17 @@ class Config:
             raise
         except Exception as e:
             raise ConfigurationError(
-                f"Failed to load config from {path}",
-                context={"path": str(path), "error": str(e)}
+                f"Failed to load config from {path}", context={"path": str(path), "error": str(e)}
             )
 
     def _load_env(self) -> None:
         """Load configuration from environment variables."""
         if format_val := os.getenv("JRA_FORMAT"):
             self._config["evaluation"]["default_format"] = format_val
-        
+
         if strict := os.getenv("JRA_STRICT"):
             self._config["evaluation"]["strict_mode"] = strict.lower() in ("true", "1", "yes")
-        
+
         if os.getenv("NO_COLOR"):
             self._config["evaluation"]["enable_color"] = False
 
@@ -126,35 +124,35 @@ class Config:
 
     def get(self, key_path: str, default: Any = None) -> Any:
         """Get configuration value by dot-separated path.
-        
+
         Args:
             key_path: Dot-separated key path (e.g., "quality.thresholds.good")
             default: Default value if key not found
-            
+
         Returns:
             Configuration value
         """
         keys = key_path.split(".")
         value = self._config
-        
+
         for key in keys:
             if isinstance(value, dict) and key in value:
                 value = value[key]
             else:
                 return default
-        
+
         return value
 
     def set(self, key_path: str, value: Any) -> None:
         """Set configuration value by dot-separated path."""
         keys = key_path.split(".")
         config = self._config
-        
+
         for key in keys[:-1]:
             if key not in config:
                 config[key] = {}
             config = config[key]
-        
+
         config[keys[-1]] = value
 
 

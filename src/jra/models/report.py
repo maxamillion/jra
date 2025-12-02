@@ -23,9 +23,7 @@ class ComplianceResult(BaseModel):
     high_violations: int = Field(default=0, description="Number of high severity violations")
     medium_violations: int = Field(default=0, description="Number of medium severity violations")
     low_violations: int = Field(default=0, description="Number of low severity violations")
-    compliance_score: float = Field(
-        ..., ge=0.0, le=100.0, description="Compliance score (0-100)"
-    )
+    compliance_score: float = Field(..., ge=0.0, le=100.0, description="Compliance score (0-100)")
 
     @field_validator("compliance_score")
     @classmethod
@@ -52,9 +50,7 @@ class ComplianceResult(BaseModel):
         self.medium_violations = sum(
             1 for v in self.violations if v.severity == ViolationSeverity.MEDIUM
         )
-        self.low_violations = sum(
-            1 for v in self.violations if v.severity == ViolationSeverity.LOW
-        )
+        self.low_violations = sum(1 for v in self.violations if v.severity == ViolationSeverity.LOW)
         self.total_violations = len(self.violations)
 
     def has_blocking_violations(self) -> bool:

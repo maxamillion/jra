@@ -148,9 +148,7 @@ class JiraIssue(BaseModel):
     subtasks: List[Subtask] = Field(default_factory=list, description="Subtasks")
 
     # Custom fields (preserved for extensibility)
-    custom_fields: Dict[str, Any] = Field(
-        default_factory=dict, description="Custom field values"
-    )
+    custom_fields: Dict[str, Any] = Field(default_factory=dict, description="Custom field values")
 
     @field_validator("summary")
     @classmethod

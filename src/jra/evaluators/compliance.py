@@ -74,9 +74,7 @@ class ComplianceEvaluator(BaseEvaluator):
         except Exception as e:
             if isinstance(e, EvaluationError):
                 raise
-            raise EvaluationError(
-                f"Compliance evaluation failed for {issue.key}: {str(e)}"
-            ) from e
+            raise EvaluationError(f"Compliance evaluation failed for {issue.key}: {str(e)}") from e
 
     def _check_required_fields(
         self, issue: JiraIssue, guidelines: ProcessGuidelines
@@ -138,10 +136,16 @@ class ComplianceEvaluator(BaseEvaluator):
                 violations.append(
                     Violation(
                         field=required_field.field_name,
-                        message=f"Required field '{required_field.field_name}' is missing or empty",
+                        message=(
+                            f"Required field '{required_field.field_name}' " "is missing or empty"
+                        ),
                         severity=ViolationSeverity.HIGH,
                         category=ViolationCategory.REQUIRED_FIELD,
-                        reference=f"Required Fields for {issue_type}" if required_field.issue_type else "Universal Required Fields",
+                        reference=(
+                            f"Required Fields for {issue_type}"
+                            if required_field.issue_type
+                            else "Universal Required Fields"
+                        ),
                         suggestion=f"Add {required_field.field_name} to the ticket",
                     )
                 )
@@ -203,13 +207,17 @@ class ComplianceEvaluator(BaseEvaluator):
             violations.append(
                 Violation(
                     field=field_name,
-                    message=f"Field is too short (minimum {validation.min_length} characters)",
+                    message=(
+                        f"Field is too short " f"(minimum {validation.min_length} characters)"
+                    ),
                     severity=ViolationSeverity.MEDIUM,
                     category=ViolationCategory.FIELD_VALIDATION,
                     reference=f"{field_name.title()} Validation",
                     current_value=f"{len(field_value)} characters",
                     expected_value=f"≥{validation.min_length} characters",
-                    suggestion=f"Expand {field_name} to at least {validation.min_length} characters",
+                    suggestion=(
+                        f"Expand {field_name} to at least " f"{validation.min_length} characters"
+                    ),
                 )
             )
 
@@ -218,13 +226,15 @@ class ComplianceEvaluator(BaseEvaluator):
             violations.append(
                 Violation(
                     field=field_name,
-                    message=f"Field is too long (maximum {validation.max_length} characters)",
+                    message=(f"Field is too long " f"(maximum {validation.max_length} characters)"),
                     severity=ViolationSeverity.LOW,
                     category=ViolationCategory.FIELD_VALIDATION,
                     reference=f"{field_name.title()} Validation",
                     current_value=f"{len(field_value)} characters",
                     expected_value=f"≤{validation.max_length} characters",
-                    suggestion=f"Shorten {field_name} to {validation.max_length} characters or less",
+                    suggestion=(
+                        f"Shorten {field_name} to " f"{validation.max_length} characters or less"
+                    ),
                 )
             )
 
@@ -266,11 +276,10 @@ class ComplianceEvaluator(BaseEvaluator):
         current_status = issue.get_status_name()
 
         # Get valid transitions from current status
-        valid_transitions = guidelines.get_workflow_transitions_from(current_status)
-
-        # For now, we don't have historical transition data
+        # Note: valid_transitions would be used when we have historical transition data
         # This would require access to issue history/changelog
         # Placeholder for future enhancement
+        _ = guidelines.get_workflow_transitions_from(current_status)
 
         return violations
 
