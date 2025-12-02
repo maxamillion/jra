@@ -16,7 +16,7 @@ else:
 
 from dotenv import load_dotenv
 
-from jra.utils.exceptions import ConfigValidationError
+from jra.utils.exceptions import ConfigurationError
 
 
 class Config:
@@ -45,9 +45,10 @@ class Config:
             "max_recommendations": 10,
             "include_examples": True,
             "verbose_violations": True,
+            "indent": 2,
         },
         "batch": {
-            "default_workers": 1,
+            "max_workers": 4,
             "continue_on_error": False,
             "show_progress": True,
         },
@@ -83,28 +84,60 @@ class Config:
     def _load_file(self, path: Path) -> None:
         """Load configuration from TOML file."""
         if not path.exists():
-            raise ConfigValidationError(
+            raise ConfigurationError(
                 f"Configuration file not found: {path}", context={"path": str(path)}
             )
 
         try:
             with open(path, "rb") as f:
                 if tomllib is None:
-                    raise ConfigValidationError(
+                    raise ConfigurationError(
                         "TOML support not available. Install tomli for Python < 3.11"
                     )
                 file_config = tomllib.load(f)
 
                 self._merge_config(file_config)
-        except ConfigValidationError:
+        except ConfigurationError:
             raise
         except Exception as e:
-            raise ConfigValidationError(
+            raise ConfigurationError(
                 f"Failed to load config from {path}", context={"path": str(path), "error": str(e)}
             )
 
     def _load_env(self) -> None:
-        """Load configuration from environment variables."""
+        """Load configuration from environment variables.
+
+        Supports both:
+        - Generic pattern: JRA_SECTION_KEY (e.g., JRA_EVALUATION_STRICT_MODE)
+        - Legacy shortcuts: JRA_FORMAT, JRA_STRICT, NO_COLOR
+        """
+        # Generic pattern: JRA_SECTION_KEY
+        for env_key, env_value in os.environ.items():
+            if env_key.startswith("JRA_"):
+                # Convert JRA_EVALUATION_STRICT_MODE to evaluation.strict_mode
+                parts = env_key[4:].lower().split("_")
+                if len(parts) >= 2:
+                    section = parts[0]
+                    key = "_".join(parts[1:])
+                    key_path = f"{section}.{key}"
+
+                    # Try to convert value to appropriate type
+                    value: Any
+                    if env_value.lower() in ("true", "1", "yes"):
+                        value = True
+                    elif env_value.lower() in ("false", "0", "no"):
+                        value = False
+                    elif env_value.isdigit():
+                        value = int(env_value)
+                    else:
+                        try:
+                            value = float(env_value)
+                        except ValueError:
+                            value = env_value
+
+                    self.set(key_path, value)
+
+        # Legacy shortcuts
         if format_val := os.getenv("JRA_FORMAT"):
             self._config["evaluation"]["default_format"] = format_val
 
@@ -154,6 +187,38 @@ class Config:
             config = config[key]
 
         config[keys[-1]] = value
+
+    def load_from_file(self, path: Path) -> None:
+        """Load configuration from TOML file (public method).
+
+        Args:
+            path: Path to TOML configuration file
+
+        Raises:
+            ConfigurationError: If file not found or parsing fails
+        """
+        self._load_file(path)
+
+    def load_from_env(self) -> None:
+        """Load configuration from environment variables (public method)."""
+        self._load_env()
+
+    def as_dict(self) -> Dict[str, Any]:
+        """Return configuration as dictionary.
+
+        Returns:
+            Complete configuration dictionary
+        """
+        return self._config.copy()
+
+    @property
+    def config(self) -> Dict[str, Any]:
+        """Get configuration dictionary.
+
+        Returns:
+            Configuration dictionary
+        """
+        return self._config
 
 
 # Global configuration instance

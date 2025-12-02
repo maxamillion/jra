@@ -86,3 +86,9 @@ class IOError(OutputError):
     """Error with file I/O operations."""
 
     pass
+
+
+class ConfigurationError(JRAException):
+    """Error with configuration loading or validation."""
+
+    pass

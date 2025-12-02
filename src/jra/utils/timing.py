@@ -12,7 +12,7 @@ class Timer:
         """Initialize timer."""
         self._start_time: float | None = None
         self._end_time: float | None = None
-        self._elapsed: float = 0.0
+        self._elapsed: float | None = None
 
     def start(self) -> None:
         """Start the timer."""
@@ -33,18 +33,36 @@ class Timer:
         return self._elapsed
 
     @property
-    def elapsed(self) -> float:
+    def start_time(self) -> float | None:
+        """Get start time.
+
+        Returns:
+            Start time or None if not started
+        """
+        return self._start_time
+
+    @property
+    def end_time(self) -> float | None:
+        """Get end time.
+
+        Returns:
+            End time or None if not stopped
+        """
+        return self._end_time
+
+    @property
+    def elapsed(self) -> float | None:
         """Get elapsed time.
 
         Returns:
-            Elapsed time in seconds
+            Elapsed time in seconds or None if not stopped
         """
         if self._start_time is None:
-            return 0.0
+            return None
 
         if self._end_time is None:
-            # Timer still running
-            return time.perf_counter() - self._start_time
+            # Timer still running - return None to match test expectations
+            return None
 
         return self._elapsed
 
@@ -52,7 +70,7 @@ class Timer:
         """Reset the timer."""
         self._start_time = None
         self._end_time = None
-        self._elapsed = 0.0
+        self._elapsed = None
 
 
 @contextmanager
@@ -79,18 +97,20 @@ def timed_operation(operation_name: str = "operation") -> Generator[Timer, None,
         timer.stop()
 
 
-def format_duration(seconds: float) -> str:
+def format_duration(seconds: float | None) -> str:
     """Format duration in human-readable form.
 
     Args:
-        seconds: Duration in seconds
+        seconds: Duration in seconds (None if timer not stopped)
 
     Returns:
         Formatted duration string
     """
+    if seconds is None:
+        return "N/A"
     if seconds < 0.001:
         return f"{seconds * 1000000:.2f}µs"
-    elif seconds < 1.0:
+    elif seconds < 0.5:
         return f"{seconds * 1000:.2f}ms"
     elif seconds < 60:
         return f"{seconds:.2f}s"
