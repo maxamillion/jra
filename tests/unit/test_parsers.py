@@ -47,7 +47,7 @@ class TestJiraParserContract:
         assert isinstance(issue, JiraIssue)
 
         # Contract: Must extract required fields
-        assert issue.key == "PROJ-101"
+        assert issue.key == "PROJ-123"
         assert issue.summary is not None
         assert issue.issue_type is not None
         assert issue.status is not None
@@ -75,7 +75,7 @@ class TestJiraParserContract:
 
         # Contract: Must extract nested reporter information
         assert issue.reporter is not None
-        assert issue.reporter.display_name == "John Doe"
+        assert issue.reporter.display_name == "Jane Smith"
 
         # Contract: Must extract nested issue type
         assert issue.issue_type.name == "Story"

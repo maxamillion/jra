@@ -1,10 +1,19 @@
 """Pytest configuration and shared fixtures."""
 
 import json
+import logging
 from pathlib import Path
 from typing import Any, Dict
 
 import pytest
+
+
+@pytest.fixture(autouse=True)
+def disable_logging() -> None:
+    """Disable logging during tests to prevent stderr contamination."""
+    logging.disable(logging.CRITICAL)
+    yield
+    logging.disable(logging.NOTSET)
 
 
 @pytest.fixture

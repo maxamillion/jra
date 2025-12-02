@@ -108,15 +108,15 @@ class TestConfig:
         config.set("evaluation.strict_mode", not original)
         assert config.get("evaluation.strict_mode") == (not original)
 
-    @patch("builtins.open", new_callable=mock_open, read_data="[jra]\nstrict_mode = true\n")
+    @patch("builtins.open", new_callable=mock_open, read_data=b"[jra]\nstrict_mode = true\n")
     @patch("pathlib.Path.exists", return_value=True)
     def test_load_from_file(self, mock_exists: MagicMock, mock_file: MagicMock) -> None:
         """Test loading configuration from TOML file."""
         config = Config()
         config.load_from_file(Path("test.toml"))
 
-        # Verify file was opened
-        mock_file.assert_called()
+        # Verify file was opened in binary mode
+        mock_file.assert_called_with(Path("test.toml"), "rb")
 
     @patch("pathlib.Path.exists", return_value=False)
     def test_load_from_nonexistent_file(self, mock_exists: MagicMock) -> None:

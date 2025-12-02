@@ -128,67 +128,37 @@ class MarkdownParser:
         """Parse required fields from markdown."""
         required_fields: list[RequiredField] = []
 
-        # Look for "Required Fields" section
-        required_section = None
-        for section_name, section_content in sections.items():
-            if "required" in section_name.lower() and "field" in section_name.lower():
-                required_section = section_content
-                break
-
-        if not required_section:
-            return required_fields
-
-        # Parse universal required fields
-        universal_match = re.search(
-            r"Universal Required Fields.*?:(.*?)(?=###|##|$)",
-            required_section,
-            re.DOTALL | re.IGNORECASE,
-        )
-        if universal_match:
-            field_text = universal_match.group(1)
-            fields = self._extract_field_list(field_text)
+        # Parse universal required fields - look for section directly
+        universal_section = sections.get("Universal Required Fields")
+        if universal_section:
+            fields = self._extract_field_list(universal_section)
             for field in fields:
                 required_fields.append(
                     RequiredField(field_name=field, issue_type=None, description=None)
                 )
 
-        # Parse story-specific required fields
-        story_match = re.search(
-            r"Story-Specific Required Fields.*?:(.*?)(?=###|##|$)",
-            required_section,
-            re.DOTALL | re.IGNORECASE,
-        )
-        if story_match:
-            field_text = story_match.group(1)
-            fields = self._extract_field_list(field_text)
+        # Parse story-specific required fields - look for section directly
+        story_section = sections.get("Story-Specific Required Fields")
+        if story_section:
+            fields = self._extract_field_list(story_section)
             for field in fields:
                 required_fields.append(
                     RequiredField(field_name=field, issue_type="Story", description=None)
                 )
 
-        # Parse bug-specific required fields
-        bug_match = re.search(
-            r"Bug-Specific Required Fields.*?:(.*?)(?=###|##|$)",
-            required_section,
-            re.DOTALL | re.IGNORECASE,
-        )
-        if bug_match:
-            field_text = bug_match.group(1)
-            fields = self._extract_field_list(field_text)
+        # Parse bug-specific required fields - look for section directly
+        bug_section = sections.get("Bug-Specific Required Fields")
+        if bug_section:
+            fields = self._extract_field_list(bug_section)
             for field in fields:
                 required_fields.append(
                     RequiredField(field_name=field, issue_type="Bug", description=None)
                 )
 
-        # Parse epic-specific required fields
-        epic_match = re.search(
-            r"Epic-Specific Required Fields.*?:(.*?)(?=###|##|$)",
-            required_section,
-            re.DOTALL | re.IGNORECASE,
-        )
-        if epic_match:
-            field_text = epic_match.group(1)
-            fields = self._extract_field_list(field_text)
+        # Parse epic-specific required fields - look for section directly
+        epic_section = sections.get("Epic-Specific Required Fields")
+        if epic_section:
+            fields = self._extract_field_list(epic_section)
             for field in fields:
                 required_fields.append(
                     RequiredField(field_name=field, issue_type="Epic", description=None)
@@ -202,45 +172,31 @@ class MarkdownParser:
         """Parse field validation rules from markdown."""
         validations: list[FieldValidation] = []
 
-        # Look for "Field Validations" section
-        validation_section = None
-        for section_name, section_content in sections.items():
-            if "field validation" in section_name.lower() or "validation" in section_name.lower():
-                validation_section = section_content
-                break
-
-        if not validation_section:
-            return validations
-
-        # Parse summary validation
-        summary_match = re.search(
-            r"Summary Validation(.*?)(?=###|##|$)", validation_section, re.DOTALL | re.IGNORECASE
-        )
-        if summary_match:
-            validation_text = summary_match.group(1)
-            validation = self._parse_single_field_validation("summary", validation_text)
+        # Parse summary validation - look for section directly
+        summary_section = sections.get("Summary Validation")
+        if summary_section:
+            validation = self._parse_single_field_validation("summary", summary_section)
             if validation:
                 validations.append(validation)
 
-        # Parse description validation
-        desc_match = re.search(
-            r"Description Validation(.*?)(?=###|##|$)",
-            validation_section,
-            re.DOTALL | re.IGNORECASE,
-        )
-        if desc_match:
-            validation_text = desc_match.group(1)
-            validation = self._parse_single_field_validation("description", validation_text)
+        # Parse description validation - look for section directly
+        desc_section = sections.get("Description Validation")
+        if desc_section:
+            validation = self._parse_single_field_validation("description", desc_section)
             if validation:
                 validations.append(validation)
 
-        # Parse priority validation
-        priority_match = re.search(
-            r"Priority Validation(.*?)(?=###|##|$)", validation_section, re.DOTALL | re.IGNORECASE
-        )
-        if priority_match:
-            validation_text = priority_match.group(1)
-            validation = self._parse_single_field_validation("priority", validation_text)
+        # Parse priority validation - look for section directly
+        priority_section = sections.get("Priority Validation")
+        if priority_section:
+            validation = self._parse_single_field_validation("priority", priority_section)
+            if validation:
+                validations.append(validation)
+
+        # Parse story points validation - look for section directly
+        story_points_section = sections.get("Story Points Validation")
+        if story_points_section:
+            validation = self._parse_single_field_validation("story_points", story_points_section)
             if validation:
                 validations.append(validation)
 
@@ -310,22 +266,10 @@ class MarkdownParser:
         """Parse workflow transition rules from markdown."""
         rules: list[WorkflowRule] = []
 
-        # Look for "Workflow Rules" section
-        workflow_section = None
-        for section_name, section_content in sections.items():
-            if "workflow" in section_name.lower():
-                workflow_section = section_content
-                break
-
-        if not workflow_section:
-            return rules
-
-        # Parse required transitions section
-        transitions_match = re.search(
-            r"Required Transitions(.*?)(?=###|##|$)", workflow_section, re.DOTALL | re.IGNORECASE
-        )
-        if transitions_match:
-            transitions_text = transitions_match.group(1)
+        # Parse required transitions section - look for section directly
+        transitions_section = sections.get("Required Transitions")
+        if transitions_section:
+            transitions_text = transitions_section
 
             # Look for numbered transition rules
             transition_pattern = r"\d+\.\s*\*\*(.+?)\s*→\s*(.+?)\*\*:(.*?)(?=\d+\.|$)"
