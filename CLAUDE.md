@@ -2,6 +2,17 @@
 
 Auto-generated from all feature plans. Last updated: 2025-12-02
 
+---
+**🚨 MANDATORY REQUIREMENTS - NO EXCEPTIONS 🚨**
+
+1. **ALWAYS use the `.venv` virtual environment** - Check with `which python` before ANY command
+2. **ALWAYS use `uv pip` instead of `pip`** - NEVER use pip, pip3, or python -m pip directly
+3. **ALWAYS activate virtualenv first** - Run `source .venv/bin/activate` before any Python work
+4. **VERIFY virtualenv is active** - Ensure shell prompt shows `(.venv)` prefix
+
+If virtualenv is not active or uv is not being used, STOP and activate it first.
+---
+
 ## Active Technologies
 
 - **Python 3.11+**: Modern Python with latest features including structural pattern matching, improved type hints, and enhanced error messages
@@ -25,7 +36,25 @@ jra/
 
 ## Python Virtual Environment Management
 
-**CRITICAL**: This project MUST always use virtual environments managed by `uv`. Never install packages globally or use other virtualenv tools.
+**🚨 ABSOLUTE REQUIREMENTS - ZERO EXCEPTIONS 🚨**
+
+This project has **MANDATORY** virtualenv and uv requirements. Every single Python operation must follow these rules:
+
+### Pre-Flight Checklist (Run BEFORE every operation)
+
+```bash
+# 1. Check if virtualenv is active
+which python
+# MUST show: /home/admiller/src/jra/.venv/bin/python
+# If not, STOP and activate virtualenv
+
+# 2. Activate virtualenv if needed
+source .venv/bin/activate
+
+# 3. Verify activation succeeded
+echo $VIRTUAL_ENV
+# MUST show: /home/admiller/src/jra/.venv
+```
 
 ### Initial Setup
 
@@ -36,22 +65,33 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 # Create virtual environment using uv (Python 3.11+)
 uv venv --python 3.11
 
-# Activate virtual environment
+# Activate virtual environment - MANDATORY for all subsequent commands
 source .venv/bin/activate  # Linux/macOS
 # OR
 .venv\Scripts\activate     # Windows
 
-# Install dependencies using uv
+# Install dependencies using uv (NOT pip!)
 uv pip install -e ".[dev]"
 ```
 
-### Daily Development Workflow
+### Daily Development Workflow - MANDATORY PATTERN
 
 ```bash
-# ALWAYS activate virtualenv before any Python work
+# ======================================
+# STEP 1: ALWAYS ACTIVATE FIRST
+# ======================================
 source .venv/bin/activate
 
-# Add new dependencies using uv (not pip!)
+# ======================================
+# STEP 2: VERIFY ACTIVATION
+# ======================================
+which python  # MUST show .venv/bin/python
+
+# ======================================
+# STEP 3: Use uv pip for ALL operations
+# ======================================
+
+# Add new dependencies using uv (NEVER use pip!)
 uv pip install <package-name>
 
 # Update dependencies
@@ -60,17 +100,51 @@ uv pip install --upgrade <package-name>
 # Sync dependencies from pyproject.toml
 uv pip sync
 
-# Deactivate when done
+# Install in development mode
+uv pip install -e ".[dev]"
+
+# ======================================
+# STEP 4: Deactivate when done
+# ======================================
 deactivate
 ```
 
-### Dependency Management Rules
+### Dependency Management Rules - ABSOLUTE
 
 1. **ALWAYS use `uv pip` instead of `pip`** - uv is significantly faster and more reliable
-2. **NEVER use `pip` directly** - all package operations must go through uv
-3. **Keep pyproject.toml as source of truth** - manually edit dependencies there, then sync
-4. **Lock dependencies with uv** - uv automatically maintains uv.lock for reproducible builds
-5. **Use extras for optional dependencies** - separate dev, test, and optional features
+2. **NEVER EVER use `pip`, `pip3`, or `python -m pip` directly** - all package operations MUST go through `uv pip`
+3. **ALWAYS activate virtualenv FIRST** - Check with `which python` before ANY command
+4. **VERIFY before executing** - Ensure `which python` shows `.venv/bin/python`
+5. **Keep pyproject.toml as source of truth** - manually edit dependencies there, then sync
+6. **Lock dependencies with uv** - uv automatically maintains uv.lock for reproducible builds
+7. **Use extras for optional dependencies** - separate dev, test, and optional features
+
+### ❌ FORBIDDEN COMMANDS ❌
+
+```bash
+# NEVER use these commands:
+pip install <package>           # ❌ FORBIDDEN - use: uv pip install
+pip3 install <package>          # ❌ FORBIDDEN - use: uv pip install
+python -m pip install <package> # ❌ FORBIDDEN - use: uv pip install
+sudo pip install <package>      # ❌ FORBIDDEN - NEVER install globally
+
+# Also forbidden without virtualenv active:
+pytest                          # ❌ Must activate .venv first
+python <script>                 # ❌ Must activate .venv first
+mypy <path>                     # ❌ Must activate .venv first
+ruff <command>                  # ❌ Must activate .venv first
+```
+
+### ✅ CORRECT PATTERNS ✅
+
+```bash
+# ALWAYS follow this pattern:
+source .venv/bin/activate       # ✅ Step 1: Activate
+which python                    # ✅ Step 2: Verify
+uv pip install <package>        # ✅ Step 3: Use uv pip
+pytest                          # ✅ Step 4: Run commands
+deactivate                      # ✅ Step 5: Deactivate when done
+```
 
 ## Python Best Practices
 
@@ -143,6 +217,9 @@ deactivate
 ### Testing Practices
 
 ```bash
+# ALWAYS activate virtualenv first!
+source .venv/bin/activate
+
 # Run all tests with pytest
 pytest
 
@@ -170,6 +247,9 @@ pytest -k "test_user"
 ### Code Quality Tools
 
 ```bash
+# ALWAYS activate virtualenv first!
+source .venv/bin/activate
+
 # Run ruff for linting and formatting
 ruff check .                    # Check for issues
 ruff check --fix .             # Auto-fix issues
@@ -207,6 +287,9 @@ uv pip install -e ".[dev]"
 ### Code Quality
 
 ```bash
+# ALWAYS activate virtualenv first!
+source .venv/bin/activate
+
 # Format code automatically
 ruff format .
 
@@ -223,6 +306,9 @@ ruff check . && mypy src/ && pytest
 ### Testing
 
 ```bash
+# ALWAYS activate virtualenv first!
+source .venv/bin/activate
+
 # Run test suite
 pytest
 
@@ -236,6 +322,9 @@ pytest tests/test_cli.py::test_main_command
 ### Building and Distribution
 
 ```bash
+# ALWAYS activate virtualenv first!
+source .venv/bin/activate
+
 # Build package
 python -m build
 
@@ -245,11 +334,32 @@ uv pip install -e .
 
 ## Git Workflow
 
-1. **Always work in a virtualenv** - Verify with `which python` showing `.venv/bin/python`
-2. **Run quality checks before commit** - `ruff check . && mypy src/ && pytest`
-3. **Write descriptive commit messages** - Follow conventional commits format
-4. **Keep commits focused** - One logical change per commit
-5. **Never commit virtualenv or cache files** - Ensure `.gitignore` is comprehensive
+**🚨 MANDATORY: Activate virtualenv BEFORE any git workflow commands 🚨**
+
+```bash
+# STEP 1: ALWAYS activate virtualenv first
+source .venv/bin/activate
+
+# STEP 2: Verify virtualenv is active
+which python  # MUST show: /home/admiller/src/jra/.venv/bin/python
+
+# STEP 3: Run quality checks
+ruff check . && mypy src/ && pytest
+
+# STEP 4: Stage and commit changes
+git add <files>
+git commit -m "descriptive message"
+```
+
+**Git Workflow Rules**:
+
+1. **ALWAYS activate virtualenv FIRST** - Verify with `which python` showing `.venv/bin/python`
+2. **NEVER skip quality checks** - Run `ruff check . && mypy src/ && pytest` before EVERY commit
+3. **Use uv pip exclusively** - NEVER use pip for any dependency changes
+4. **Write descriptive commit messages** - Follow conventional commits format
+5. **Keep commits focused** - One logical change per commit
+6. **Never commit virtualenv or cache files** - Ensure `.gitignore` is comprehensive
+7. **Verify virtualenv state** - Check `which python` shows correct path before pushing
 
 ## Performance Considerations
 
@@ -267,9 +377,57 @@ uv pip install -e .
 4. **Secrets management** - Never commit secrets; use environment variables or secret managers
 5. **Least privilege** - Request minimum necessary permissions for file/network operations
 
+## Quick Reference Summary
+
+### Every Command Must Follow This Pattern
+
+```bash
+# 1️⃣ ACTIVATE (required for ALL operations)
+source .venv/bin/activate
+
+# 2️⃣ VERIFY (check before proceeding)
+which python  # Must show: /home/admiller/src/jra/.venv/bin/python
+
+# 3️⃣ EXECUTE (use uv pip for package operations)
+uv pip install <package>  # ✅ CORRECT
+# pip install <package>   # ❌ FORBIDDEN
+
+# 4️⃣ RUN (Python commands)
+pytest                     # ✅ Now safe to run
+ruff check .              # ✅ Now safe to run
+mypy src/                 # ✅ Now safe to run
+```
+
+### Universal Rules (No Exceptions)
+
+| Rule | Command | Status |
+|------|---------|--------|
+| Use uv pip | `uv pip install` | ✅ REQUIRED |
+| Never use pip | `pip install` | ❌ FORBIDDEN |
+| Activate first | `source .venv/bin/activate` | ✅ REQUIRED |
+| Verify activation | `which python` | ✅ REQUIRED |
+| Check virtualenv | Must show `.venv/bin/python` | ✅ REQUIRED |
+
+### Common Mistakes to Avoid
+
+❌ **WRONG**: Running commands without virtualenv
+```bash
+pytest                    # ❌ NO! Virtualenv not active
+pip install requests      # ❌ NO! Using pip instead of uv pip
+```
+
+✅ **CORRECT**: Always activate first
+```bash
+source .venv/bin/activate # ✅ Activate first
+which python              # ✅ Verify
+uv pip install requests   # ✅ Use uv pip
+pytest                    # ✅ Now safe to run
+```
+
 ## Recent Changes
 
 - 001-jira-evaluation: Added Python 3.11+ + Click (CLI), Pydantic (validation), python-markdown (parsing), PyYAML (config)
+- 2025-12-02: Enhanced virtualenv and uv requirements with explicit enforcement and forbidden patterns
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
