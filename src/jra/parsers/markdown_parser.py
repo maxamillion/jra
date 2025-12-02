@@ -148,7 +148,11 @@ class MarkdownParser:
             field_text = universal_match.group(1)
             fields = self._extract_field_list(field_text)
             for field in fields:
-                required_fields.append(RequiredField(field_name=field, issue_type=None, description=None))
+                required_fields.append(
+                    RequiredField(
+                        field_name=field, issue_type=None, description=None
+                    )
+                )
 
         # Parse story-specific required fields
         story_match = re.search(
@@ -160,7 +164,11 @@ class MarkdownParser:
             field_text = story_match.group(1)
             fields = self._extract_field_list(field_text)
             for field in fields:
-                required_fields.append(RequiredField(field_name=field, issue_type="Story", description=None))
+                required_fields.append(
+                    RequiredField(
+                        field_name=field, issue_type="Story", description=None
+                    )
+                )
 
         # Parse bug-specific required fields
         bug_match = re.search(
@@ -172,7 +180,11 @@ class MarkdownParser:
             field_text = bug_match.group(1)
             fields = self._extract_field_list(field_text)
             for field in fields:
-                required_fields.append(RequiredField(field_name=field, issue_type="Bug", description=None))
+                required_fields.append(
+                    RequiredField(
+                        field_name=field, issue_type="Bug", description=None
+                    )
+                )
 
         # Parse epic-specific required fields
         epic_match = re.search(
@@ -184,7 +196,11 @@ class MarkdownParser:
             field_text = epic_match.group(1)
             fields = self._extract_field_list(field_text)
             for field in fields:
-                required_fields.append(RequiredField(field_name=field, issue_type="Epic", description=None))
+                required_fields.append(
+                    RequiredField(
+                        field_name=field, issue_type="Epic", description=None
+                    )
+                )
 
         return required_fields
 
