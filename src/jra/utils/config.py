@@ -16,7 +16,7 @@ else:
 
 from dotenv import load_dotenv
 
-from jra.utils.exceptions import ConfigurationError
+from jra.utils.exceptions import ConfigValidationError
 
 
 class Config:
@@ -83,23 +83,23 @@ class Config:
     def _load_file(self, path: Path) -> None:
         """Load configuration from TOML file."""
         if not path.exists():
-            raise ConfigurationError(
+            raise ConfigValidationError(
                 f"Configuration file not found: {path}", context={"path": str(path)}
             )
 
         try:
             with open(path, "rb") as f:
                 if tomllib is None:
-                    raise ConfigurationError(
+                    raise ConfigValidationError(
                         "TOML support not available. Install tomli for Python < 3.11"
                     )
                 file_config = tomllib.load(f)
 
                 self._merge_config(file_config)
-        except ConfigurationError:
+        except ConfigValidationError:
             raise
         except Exception as e:
-            raise ConfigurationError(
+            raise ConfigValidationError(
                 f"Failed to load config from {path}", context={"path": str(path), "error": str(e)}
             )
 

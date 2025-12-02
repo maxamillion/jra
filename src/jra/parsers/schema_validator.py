@@ -5,7 +5,7 @@ Validates JSON data against defined schemas for Jira inputs and evaluation outpu
 
 import json
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Tuple, Type, Union
 
 from jra.utils.exceptions import ValidationError
 
@@ -57,7 +57,7 @@ class SchemaValidator:
 
         try:
             with open(schema_path) as f:
-                schema = json.load(f)
+                schema: Dict[str, Any] = json.load(f)
 
             self._schemas[schema_name] = schema
             return schema
@@ -179,7 +179,7 @@ class SchemaValidator:
         Returns:
             True if type matches
         """
-        type_mapping = {
+        type_mapping: Dict[str, Union[Type[Any], Tuple[Type[Any], ...]]] = {
             "string": str,
             "number": (int, float),
             "integer": int,

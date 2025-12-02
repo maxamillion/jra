@@ -67,6 +67,8 @@ class ComplianceEvaluator(BaseEvaluator):
                 ticket_key=issue.key,
                 evaluated_at=datetime.now(),
                 compliance=compliance,
+                metadata=None,
+                summary=None,
             )
 
             return report
@@ -146,6 +148,8 @@ class ComplianceEvaluator(BaseEvaluator):
                             if required_field.issue_type
                             else "Universal Required Fields"
                         ),
+                        current_value=None,
+                        expected_value=None,
                         suggestion=f"Add {required_field.field_name} to the ticket",
                     )
                 )
@@ -180,9 +184,10 @@ class ComplianceEvaluator(BaseEvaluator):
 
         # Validate priority
         priority_validation = guidelines.get_validation_for_field("priority")
-        if priority_validation and issue.priority:
+        priority_name = issue.get_priority_name()
+        if priority_validation and priority_name:
             violations.extend(
-                self._validate_field("priority", issue.get_priority_name(), priority_validation)
+                self._validate_field("priority", priority_name, priority_validation)
             )
 
         return violations
@@ -251,6 +256,7 @@ class ComplianceEvaluator(BaseEvaluator):
                             severity=ViolationSeverity.MEDIUM,
                             category=ViolationCategory.FIELD_VALIDATION,
                             reference=f"{field_name.title()} Validation - Required Sections",
+                            current_value=None,
                             expected_value=section,
                             suggestion=f"Add '{section}' section to {field_name}",
                         )
@@ -270,7 +276,7 @@ class ComplianceEvaluator(BaseEvaluator):
         Returns:
             List of violations for workflow rule failures
         """
-        violations = []
+        violations: list[Violation] = []
 
         # Get current status
         current_status = issue.get_status_name()

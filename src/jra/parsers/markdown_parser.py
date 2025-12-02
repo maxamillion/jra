@@ -103,7 +103,7 @@ class MarkdownParser:
         lines = content.split("\n")
 
         current_section = None
-        current_content = []
+        current_content: list[str] = []
 
         for line in lines:
             header_match = re.match(header_pattern, line)
@@ -126,7 +126,7 @@ class MarkdownParser:
 
     def _parse_required_fields(self, sections: Dict[str, str], content: str) -> List[RequiredField]:
         """Parse required fields from markdown."""
-        required_fields = []
+        required_fields: list[RequiredField] = []
 
         # Look for "Required Fields" section
         required_section = None
@@ -148,7 +148,7 @@ class MarkdownParser:
             field_text = universal_match.group(1)
             fields = self._extract_field_list(field_text)
             for field in fields:
-                required_fields.append(RequiredField(field_name=field, issue_type=None))
+                required_fields.append(RequiredField(field_name=field, issue_type=None, description=None))
 
         # Parse story-specific required fields
         story_match = re.search(
@@ -160,7 +160,7 @@ class MarkdownParser:
             field_text = story_match.group(1)
             fields = self._extract_field_list(field_text)
             for field in fields:
-                required_fields.append(RequiredField(field_name=field, issue_type="Story"))
+                required_fields.append(RequiredField(field_name=field, issue_type="Story", description=None))
 
         # Parse bug-specific required fields
         bug_match = re.search(
@@ -172,7 +172,7 @@ class MarkdownParser:
             field_text = bug_match.group(1)
             fields = self._extract_field_list(field_text)
             for field in fields:
-                required_fields.append(RequiredField(field_name=field, issue_type="Bug"))
+                required_fields.append(RequiredField(field_name=field, issue_type="Bug", description=None))
 
         # Parse epic-specific required fields
         epic_match = re.search(
@@ -184,7 +184,7 @@ class MarkdownParser:
             field_text = epic_match.group(1)
             fields = self._extract_field_list(field_text)
             for field in fields:
-                required_fields.append(RequiredField(field_name=field, issue_type="Epic"))
+                required_fields.append(RequiredField(field_name=field, issue_type="Epic", description=None))
 
         return required_fields
 
@@ -192,7 +192,7 @@ class MarkdownParser:
         self, sections: Dict[str, str], content: str
     ) -> List[FieldValidation]:
         """Parse field validation rules from markdown."""
-        validations = []
+        validations: list[FieldValidation] = []
 
         # Look for "Field Validations" section
         validation_section = None
@@ -292,6 +292,7 @@ class MarkdownParser:
                 rules=rules,
                 min_length=min_length,
                 max_length=max_length,
+                pattern=None,
                 required_sections=required_sections,
             )
 
@@ -299,7 +300,7 @@ class MarkdownParser:
 
     def _parse_workflow_rules(self, sections: Dict[str, str], content: str) -> List[WorkflowRule]:
         """Parse workflow transition rules from markdown."""
-        rules = []
+        rules: list[WorkflowRule] = []
 
         # Look for "Workflow Rules" section
         workflow_section = None
@@ -345,6 +346,7 @@ class MarkdownParser:
                         to_status=to_status,
                         required_fields=required_fields,
                         required_conditions=required_conditions,
+                        description=None,
                     )
                 )
 

@@ -6,6 +6,7 @@ Evaluates a single Jira ticket against process guidelines.
 import json
 import sys
 from pathlib import Path
+from typing import Union
 
 import click
 
@@ -127,6 +128,7 @@ def evaluate(
             # Format output
             logger.info(f"Formatting output as {output_format}")
             with timed_operation("Output formatting") as format_timer:
+                formatter: Union[JSONFormatter, HumanFormatter]
                 if output_format.lower() == "json":
                     formatter = JSONFormatter(indent=2)
                 else:
