@@ -1,0 +1,37 @@
+{
+  "id": "12345",
+  "key": "PROJ-123",
+  "fields": {
+    "project": {
+      "key": "PROJ",
+      "name": "Example Project"
+    },
+    "issuetype": {
+      "name": "Story"
+    },
+    "status": {
+      "name": "To Do"
+    },
+    "summary": "Add user authentication feature",
+    "description": "As a user, I want to securely log in to the application so that I can access my personalized dashboard and protected data. This feature is critical for user account management and security compliance.",
+    "priority": {
+      "name": "High"
+    },
+    "labels": ["security", "authentication"],
+    "components": [{"name": "Backend"}],
+    "assignee": {
+      "accountId": "5b10ac8d82e05b22cc7d4ef5",
+      "displayName": "John Doe",
+      "emailAddress": "john@example.com",
+      "active": true
+    },
+    "reporter": {
+      "accountId": "5b10ac8d82e05b22cc7d4ef6",
+      "displayName": "Jane Smith",
+      "emailAddress": "jane@example.com",
+      "active": true
+    },
+    "created": "2025-11-20T10:00:00Z",
+    "updated": "2025-11-26T09:30:00Z"
+  }
+}

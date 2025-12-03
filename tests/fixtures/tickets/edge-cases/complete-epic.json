@@ -1,0 +1,77 @@
+{
+  "id": "10004",
+  "key": "PROJ-104",
+  "fields": {
+    "summary": "Complete epic with all optional fields populated",
+    "description": "## Epic Overview\n\nThis epic represents a major initiative spanning multiple sprints.\n\n## Goals\n\n- Deliver comprehensive user authentication system\n- Support OAuth2, SAML, and traditional login\n- Ensure 99.9% uptime\n\n## Success Criteria\n\n- All authentication methods implemented and tested\n- Security audit passed\n- Performance benchmarks met\n- Documentation complete",
+    "issuetype": {
+      "name": "Epic",
+      "subtask": false
+    },
+    "priority": {
+      "name": "Critical"
+    },
+    "status": {
+      "name": "In Progress"
+    },
+    "reporter": {
+      "displayName": "Product Owner",
+      "emailAddress": "po@example.com"
+    },
+    "assignee": {
+      "displayName": "Tech Lead",
+      "emailAddress": "lead@example.com"
+    },
+    "created": "2025-10-01T09:00:00.000+0000",
+    "updated": "2025-11-26T14:30:00.000+0000",
+    "duedate": "2026-02-28",
+    "labels": ["authentication", "security", "epic", "q1-2026"],
+    "components": [
+      {
+        "name": "Backend"
+      },
+      {
+        "name": "Security"
+      }
+    ],
+    "customfield_10001": "Authentication System",
+    "customfield_10002": "2025-12-01",
+    "customfield_10003": "Q1 2026 Strategic Initiative",
+    "project": {
+      "key": "PROJ",
+      "name": "Example Project"
+    },
+    "comment": {
+      "comments": [
+        {
+          "author": {
+            "displayName": "Tech Lead"
+          },
+          "body": "Breaking this down into 8 stories for implementation.",
+          "created": "2025-10-05T10:00:00.000+0000"
+        },
+        {
+          "author": {
+            "displayName": "Security Team"
+          },
+          "body": "Security review scheduled for week of Jan 15.",
+          "created": "2025-11-15T13:00:00.000+0000"
+        }
+      ]
+    },
+    "subtasks": [
+      {
+        "key": "PROJ-105",
+        "fields": {
+          "summary": "Implement OAuth2 authentication"
+        }
+      },
+      {
+        "key": "PROJ-106",
+        "fields": {
+          "summary": "Implement SAML authentication"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,331 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Evaluation Report",
+  "description": "Schema for Jira ticket evaluation report output",
+  "type": "object",
+  "required": [
+    "ticket_key",
+    "guideline_version",
+    "timestamp",
+    "overall_status",
+    "compliance_result",
+    "quality_assessment",
+    "violations",
+    "recommendations",
+    "metadata"
+  ],
+  "properties": {
+    "ticket_key": {
+      "type": "string",
+      "description": "Evaluated ticket key",
+      "pattern": "^[A-Z]+-[0-9]+$",
+      "examples": ["PROJ-123"]
+    },
+    "guideline_version": {
+      "type": "string",
+      "description": "Version of guidelines used",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "examples": ["1.2.0"]
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "Evaluation timestamp (ISO 8601)",
+      "format": "date-time",
+      "examples": ["2025-11-26T10:30:45Z"]
+    },
+    "overall_status": {
+      "type": "string",
+      "description": "Overall compliance status",
+      "enum": ["pass", "fail", "warning"]
+    },
+    "compliance_result": {
+      "type": "object",
+      "description": "Guideline compliance check results",
+      "required": [
+        "passed",
+        "required_fields_status",
+        "field_validation_status",
+        "workflow_status",
+        "checked_rules",
+        "passed_rules",
+        "failed_rules"
+      ],
+      "properties": {
+        "passed": {
+          "type": "boolean",
+          "description": "Whether ticket passes all compliance checks"
+        },
+        "required_fields_status": {
+          "type": "object",
+          "description": "Required field presence check results",
+          "additionalProperties": {"type": "boolean"}
+        },
+        "field_validation_status": {
+          "type": "object",
+          "description": "Field validation results",
+          "additionalProperties": {"type": "boolean"}
+        },
+        "workflow_status": {
+          "type": "boolean",
+          "description": "Workflow rule compliance"
+        },
+        "checked_rules": {
+          "type": "integer",
+          "description": "Total number of rules checked",
+          "minimum": 0
+        },
+        "passed_rules": {
+          "type": "integer",
+          "description": "Number of rules passed",
+          "minimum": 0
+        },
+        "failed_rules": {
+          "type": "integer",
+          "description": "Number of rules failed",
+          "minimum": 0
+        }
+      }
+    },
+    "quality_assessment": {
+      "type": "object",
+      "description": "Quality scoring results",
+      "required": [
+        "overall_score",
+        "quality_level",
+        "dimension_scores"
+      ],
+      "properties": {
+        "overall_score": {
+          "type": "number",
+          "description": "Overall quality score (0-100)",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "quality_level": {
+          "type": "string",
+          "description": "Quality classification",
+          "enum": ["excellent", "good", "acceptable", "poor"]
+        },
+        "dimension_scores": {
+          "type": "object",
+          "description": "Scores by quality dimension",
+          "properties": {
+            "completeness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "clarity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "formatting": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "standards": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            }
+          },
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          }
+        },
+        "metric_scores": {
+          "type": "object",
+          "description": "Raw metric scores by dimension",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {"type": "number"}
+          }
+        }
+      }
+    },
+    "violations": {
+      "type": "array",
+      "description": "List of guideline violations",
+      "items": {
+        "type": "object",
+        "required": [
+          "severity",
+          "category",
+          "guideline_section",
+          "message"
+        ],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["error", "warning", "info"]
+          },
+          "category": {
+            "type": "string",
+            "enum": ["required_field", "validation", "workflow", "quality"]
+          },
+          "field_name": {
+            "type": ["string", "null"],
+            "description": "Affected field name"
+          },
+          "guideline_section": {
+            "type": "string",
+            "description": "Reference to guideline section"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable violation description"
+          },
+          "current_value": {
+            "description": "Actual field value (any type)"
+          },
+          "expected_value": {
+            "description": "Expected value or format (any type)"
+          }
+        }
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "description": "Improvement recommendations",
+      "items": {
+        "type": "object",
+        "required": [
+          "priority",
+          "category",
+          "title",
+          "description"
+        ],
+        "properties": {
+          "priority": {
+            "type": "string",
+            "enum": ["high", "medium", "low"]
+          },
+          "category": {
+            "type": "string",
+            "enum": ["completeness", "clarity", "formatting", "standards"]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "example": {
+            "type": ["string", "null"],
+            "description": "Example of improvement"
+          },
+          "field_name": {
+            "type": ["string", "null"],
+            "description": "Related field"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Evaluation metadata",
+      "required": [
+        "evaluator_version",
+        "evaluation_duration"
+      ],
+      "properties": {
+        "evaluator_version": {
+          "type": "string",
+          "description": "Tool version",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "evaluation_duration": {
+          "type": "number",
+          "description": "Processing time in seconds",
+          "minimum": 0
+        },
+        "configuration": {
+          "type": "object",
+          "description": "Evaluation configuration used"
+        },
+        "warnings": {
+          "type": "array",
+          "description": "Non-fatal warnings",
+          "items": {"type": "string"},
+          "default": []
+        },
+        "errors": {
+          "type": "array",
+          "description": "Non-fatal errors",
+          "items": {"type": "string"},
+          "default": []
+        }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "ticket_key": "PROJ-123",
+      "guideline_version": "1.2.0",
+      "timestamp": "2025-11-26T10:30:45Z",
+      "overall_status": "fail",
+      "compliance_result": {
+        "passed": false,
+        "required_fields_status": {
+          "summary": true,
+          "description": true,
+          "acceptance_criteria": false
+        },
+        "field_validation_status": {
+          "description": false,
+          "summary": true
+        },
+        "workflow_status": true,
+        "checked_rules": 10,
+        "passed_rules": 8,
+        "failed_rules": 2
+      },
+      "quality_assessment": {
+        "overall_score": 72.0,
+        "quality_level": "acceptable",
+        "dimension_scores": {
+          "completeness": 85.0,
+          "clarity": 68.0,
+          "formatting": 70.0,
+          "standards": 65.0
+        }
+      },
+      "violations": [
+        {
+          "severity": "error",
+          "category": "required_field",
+          "field_name": "acceptance_criteria",
+          "guideline_section": "§ 2.1",
+          "message": "Missing required field: acceptance_criteria",
+          "current_value": null,
+          "expected_value": "Given-When-Then format"
+        }
+      ],
+      "recommendations": [
+        {
+          "priority": "high",
+          "category": "completeness",
+          "title": "Add acceptance criteria",
+          "description": "Stories require testable acceptance criteria in Given-When-Then format",
+          "example": "Given a logged-in user, When they click logout, Then their session ends",
+          "field_name": "acceptance_criteria"
+        }
+      ],
+      "metadata": {
+        "evaluator_version": "1.0.0",
+        "evaluation_duration": 0.8,
+        "configuration": {},
+        "warnings": [],
+        "errors": []
+      }
+    }
+  ]
+}

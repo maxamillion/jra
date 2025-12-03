@@ -1,0 +1,28 @@
+{
+  "id": "10006",
+  "key": "PROJ-106",
+  "fields": {
+    "summary": "Ticket with malformed optional fields",
+    "description": null,
+    "issuetype": {
+      "name": "Task"
+    },
+    "priority": null,
+    "status": {
+      "name": "To Do"
+    },
+    "reporter": {
+      "displayName": "",
+      "emailAddress": "invalid-email"
+    },
+    "assignee": null,
+    "created": "not-a-valid-date",
+    "updated": "2025-11-26T10:00:00.000+0000",
+    "labels": [],
+    "components": [],
+    "customfield_invalid": "unexpected field",
+    "project": {
+      "key": "PROJ"
+    }
+  }
+}
